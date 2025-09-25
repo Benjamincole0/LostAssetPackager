@@ -1,9 +1,7 @@
 #pragma once
 #include <vector>
-#include <vector>
 #include <string>
 #include <fstream>
-#include <ostream>
 #include <cstdint>
 #include "Header.h"
 
@@ -13,11 +11,13 @@ namespace LAP
     {
     public:
         void AddHeader(LAP::Version version, std::ostream& output);
-        void AddAsset(std::string assetPath, std::ofstream& output);
-        void AddAssetsRecursively();
+        void AddAsset(const std::string& assetName, const std::string& originalPath,
+                      const std::string& assetData, std::ostream& output);
+                      
+        void AddSingleAsset(const std::string &assetPath, std::ofstream &output);
+        void BatchAddAssets(const std::vector<std::string>& assetPaths, std::ofstream& output);
         void AddFooter(std::ofstream& output);
 
-public:
         uint32_t footerOffset = 0;
         uint32_t headerSize = 0;
 
