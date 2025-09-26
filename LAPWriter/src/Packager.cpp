@@ -54,9 +54,9 @@ namespace LAP
 
     void Packager::AddFooter(std::ofstream& output)
     {
-        footerOffset = static_cast<uint32_t>(output.tellp());
-
         const uint32_t count = static_cast<uint32_t>(storedAssets.size());
+
+        footerOffset = static_cast<uint32_t>(output.tellp());
         LAPCore::Converter::WriteRaw(output, count);
 
         for (const auto& asset : storedAssets)
@@ -68,10 +68,11 @@ namespace LAP
             LAPCore::Converter::WriteRaw(output, asset.size);
         }
 
-        // Write footer offset back into placeholder
         output.flush();
         output.seekp(sizeof(LAP::Version), std::ios::beg);
         LAPCore::Converter::WriteRaw(output, footerOffset);
+
+        // Seek back to end to finish cleanly
         output.seekp(0, std::ios::end);
     }
 }

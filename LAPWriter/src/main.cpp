@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
             }
 
             const std::string inputPath  = argv[2];
-            const std::string outputPath = argv[3];
+            const std::string outputPath = std::string(argv[3]) + ".lpck";  
 
             if (!confirmOverwrite(outputPath))
             {
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
                 pack.AddFooter(output);
                 output.close();
 
-                std::cout << "Write complete: " << outputPath << "\n";
+                std::cout << "Write complete: " << outputPath <<".lpck\n";
                 return EXIT_SUCCESS;
             }
             catch (...)
@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
             }
 
             std::string resPath = argv[2];
-            std::string outputPath = argv[3];
+            const std::string outputPath = std::string(argv[3]) + ".lpck";  
 
             std::vector<std::string> assets;
 
