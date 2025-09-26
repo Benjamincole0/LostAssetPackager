@@ -4,14 +4,14 @@
 
 namespace LAP
 {
-    void Packager::AddHeader(LAP::Version version, std::ostream& output)
+    void Packager::AddHeader(LAP::Version p_version, std::ostream& p_output)
     {
-        LAPCore::Converter::WriteRaw(output, version);
+        LAPCore::Converter::WriteRaw(p_output, p_version);
 
         uint32_t placeholder = 0;
-        LAPCore::Converter::WriteRaw(output, placeholder);
+        LAPCore::Converter::WriteRaw(p_output, placeholder);
 
-        headerSize = sizeof(version) + sizeof(placeholder);
+        headerSize = sizeof(p_version) + sizeof(placeholder);
     }
 
     void Packager::AddAsset(const std::string& assetName, const std::string& originalPath,
@@ -32,10 +32,10 @@ namespace LAP
         });
     }
 
-    void Packager::AddSingleAsset(const std::string& assetPath, std::ofstream& output)
+    void Packager::AddSingleAsset(const std::string& p_assetPath, std::ofstream& p_output)
     {
-        std::string data = LAPCore::Converter::ReadRawFile(assetPath);
-        AddAsset(assetPath, assetPath, data, output);
+        std::string data = LAPCore::Converter::ReadRawFile(p_assetPath);
+        AddAsset(p_assetPath, p_assetPath, data, p_output);
     }
 
     void Packager::BatchAddAssets(const std::vector<std::string>& assetPaths, std::ofstream& output)
@@ -52,27 +52,26 @@ namespace LAP
     }
 
 
-    void Packager::AddFooter(std::ofstream& output)
+    void Packager::AddFooter(std::ofstream& p_output)
     {
         const uint32_t count = static_cast<uint32_t>(storedAssets.size());
 
-        footerOffset = static_cast<uint32_t>(output.tellp());
-        LAPCore::Converter::WriteRaw(output, count);
+        footerOffset = static_cast<uint32_t>(p_output.tellp());
+        LAPCore::Converter::WriteRaw(p_output, count);
 
         for (const auto& asset : storedAssets)
         {
             const uint16_t nameLength = static_cast<uint16_t>(asset.name.size());
-            LAPCore::Converter::WriteRaw(output, nameLength);
-            LAPCore::Converter::WriteRaw(output, asset.name);
-            LAPCore::Converter::WriteRaw(output, asset.offset);
-            LAPCore::Converter::WriteRaw(output, asset.size);
+            LAPCore::Converter::WriteRaw(p_output, nameLength);
+            LAPCore::Converter::WriteRaw(p_output, asset.name);
+            LAPCore::Converter::WriteRaw(p_output, asset.offset);
+            LAPCore::Converter::WriteRaw(p_output, asset.size);
         }
 
-        output.flush();
-        output.seekp(sizeof(LAP::Version), std::ios::beg);
-        LAPCore::Converter::WriteRaw(output, footerOffset);
+        p_output.flush();
+        p_output.seekp(sizeof(LAP::Version), std::ios::beg);
+        LAPCore::Converter::WriteRaw(p_output, footerOffset);
 
-        // Seek back to end to finish cleanly
-        output.seekp(0, std::ios::end);
+        p_output.seekp(0, std::ios::end);
     }
 }

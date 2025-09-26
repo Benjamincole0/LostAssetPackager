@@ -17,10 +17,10 @@ namespace LAP
         uint16_t minor;
         uint16_t patch;
 
-        bool operator<(const Version& other) const
+        bool operator<(const Version& p_other) const
         {
             return std::tie(major, minor, patch)
-                < std::tie(other.major, other.minor, other.patch);
+                < std::tie(p_other.major, p_other.minor, p_other.patch);
         }
 
     };

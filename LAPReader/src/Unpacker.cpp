@@ -4,17 +4,17 @@
 
 uint32_t Unpacker::footerOffset = 0;
 
-void Unpacker::ListAssets(const std::string& packedPath)
+void Unpacker::ListAssets(const std::string& p_packedPath)
 {
-    std::ifstream in(packedPath, std::ios::binary);
+    std::ifstream in(p_packedPath, std::ios::binary);
     if (!in.is_open())
     {
-        std::cerr << "Failed to open: " << packedPath << "\n";
+        std::cerr << "Failed to open: " << p_packedPath << "\n";
         return;
     }
 
     if (footerOffset == 0)
-        GetFooterOffset(packedPath);
+        GetFooterOffset(p_packedPath);
 
     in.seekg(footerOffset, std::ios::beg);
 
@@ -41,9 +41,9 @@ void Unpacker::ListAssets(const std::string& packedPath)
 }
 
 
-void Unpacker::SetPackedAssetPackPath(const std::string& path)
+void Unpacker::SetPackedAssetPackPath(const std::string& p_path)
 {
-    _packedAssetPath = path;
+    _packedAssetPath = p_path;
 }
 
 std::vector<uint8_t> Unpacker::LoadAsset(const std::string& packedPath, const std::string& assetName)
@@ -90,31 +90,31 @@ std::vector<uint8_t> Unpacker::LoadAsset(const std::string& packedPath, const st
 }
 
 
-void Unpacker::ExtractAsset(const std::string& packedPath, const std::string& assetName, const std::string& outName)
+void Unpacker::ExtractAsset(const std::string& p_packedPath, const std::string& p_assetName, const std::string& p_outName)
 {
-    std::ofstream out(outName, std::ios::binary);
+    std::ofstream out(p_outName, std::ios::binary);
     if (!out)
     {
-        std::cerr << "Couldn't write to output file: " << outName << std::endl;
+        std::cerr << "Couldn't write to output file: " << p_outName << std::endl;
         return;
     }
 
-    std::vector<uint8_t> data = LoadAsset(packedPath, assetName);
+    std::vector<uint8_t> data = LoadAsset(p_packedPath, p_assetName);
     if (data.empty())
     {
-        std::cerr << "Failed to extract asset: " << assetName << std::endl;
+        std::cerr << "Failed to extract asset: " << p_assetName << std::endl;
         return;
     }
 
     out.write(reinterpret_cast<const char*>(data.data()), data.size());
 }
 
-uint32_t Unpacker::GetFooterOffset(const std::string& packedAssetPath)
+uint32_t Unpacker::GetFooterOffset(const std::string& p_packedAssetPath)
 {
-    std::ifstream in(packedAssetPath, std::ios::binary);
+    std::ifstream in(p_packedAssetPath, std::ios::binary);
     if (!in.is_open())
     {
-        std::cerr << "Couldn't open asset path: " << packedAssetPath << std::endl;
+        std::cerr << "Couldn't open asset path: " << p_packedAssetPath << std::endl;
         return 0;
     }
 

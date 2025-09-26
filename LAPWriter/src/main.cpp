@@ -9,13 +9,13 @@
 #include "Header.h"
 #include <algorithm>
 
-bool confirmOverwrite(const std::string& outputPath)
+bool confirmOverwrite(const std::string& p_outputPath)
 {
-    if (!LAPUtility::CheckFileExists(outputPath))
+    if (!LAPUtility::CheckFileExists(p_outputPath))
         return true;
 
     std::string chosenValue;
-    std::cout << outputPath << " already exists! Override? y/n: ";
+    std::cout << p_outputPath << " already exists! Override? y/n: ";
 
     while (true)
     {
